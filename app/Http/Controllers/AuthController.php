@@ -1,7 +1,5 @@
 <?php
 
-// app/Http/Controllers/AuthController.php
-
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -35,8 +33,8 @@ class AuthController extends Controller
         // Iniciar sesión automáticamente
         Auth::login($user);
 
-        // Redirigir al welcome
-        return redirect()->route('welcome');
+        // Redirigir a la vista correcta
+        return redirect()->route('index'); // Redirige a la vista de index.blade.php
     }
 
     // Mostrar formulario de inicio de sesión
@@ -52,7 +50,8 @@ class AuthController extends Controller
 
         // Intentar autenticar al usuario
         if (Auth::attempt($credentials)) {
-            return redirect()->route('welcome'); // Redirigir al welcome después de iniciar sesión
+            $request->session()->regenerate();
+            return redirect()->route('index'); // Redirigir a la vista correcta
         }
 
         // Si las credenciales no coinciden

@@ -10,14 +10,26 @@ class ProductController extends Controller
     // Mostrar todos los productos
     public function index()
     {
-        $products = Product::all(); // Obtener todos los productos
-        return view('products.index', compact('products')); // Retorna la vista con los productos
+        $products = Product::all();
+        return view('auth.products.index', compact('products')); // Cambiado a la carpeta auth
+    }
+
+    // Mostrar un producto específico
+    public function show($id)
+    {
+        $product = Product::find($id);
+
+        if (!$product) {
+            return redirect()->route('products.index')->with('error', 'Producto no encontrado.');
+        }
+
+        return view('auth.products.show', compact('product'));
     }
 
     // Mostrar formulario para crear un producto
     public function create()
     {
-        return view('products.create'); // Vista para crear un producto
+        return view('auth.products.create');
     }
 
     // Guardar un nuevo producto
@@ -26,27 +38,25 @@ class ProductController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'required|string',
-            'price' => 'required|numeric',
-            'category_id' => 'required|exists:categories,id', // Validar que la categoría exista
+            'price' => 'required|numeric|min:0',
+            'category_id' => 'required|exists:categories,id',
         ]);
 
-        // Crear el producto en la base de datos
-        Product::create([
-            'name' => $request->name,
-            'description' => $request->description,
-            'price' => $request->price,
-            'category_id' => $request->category_id,
-        ]);
+        Product::create($request->all());
 
-        // Redirigir a la lista de productos
-        return redirect()->route('products.index');
+        return redirect()->route('products.index')->with('success', 'Producto creado correctamente.');
     }
 
     // Mostrar formulario para editar un producto
     public function edit($id)
     {
-        $product = Product::findOrFail($id); // Buscar producto por ID
-        return view('products.edit', compact('product')); // Vista para editar el producto
+        $product = Product::find($id);
+
+        if (!$product) {
+            return redirect()->route('products.index')->with('error', 'Producto no encontrado.');
+        }
+
+        return view('auth.products.edit', compact('product'));
     }
 
     // Actualizar un producto
@@ -55,30 +65,32 @@ class ProductController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'required|string',
-            'price' => 'required|numeric',
+            'price' => 'required|numeric|min:0',
             'category_id' => 'required|exists:categories,id',
         ]);
 
-        // Buscar y actualizar el producto
-        $product = Product::findOrFail($id);
-        $product->update([
-            'name' => $request->name,
-            'description' => $request->description,
-            'price' => $request->price,
-            'category_id' => $request->category_id,
-        ]);
+        $product = Product::find($id);
 
-        // Redirigir al índice de productos
-        return redirect()->route('products.index');
+        if (!$product) {
+            return redirect()->route('products.index')->with('error', 'Producto no encontrado.');
+        }
+
+        $product->update($request->all());
+
+        return redirect()->route('products.index')->with('success', 'Producto actualizado correctamente.');
     }
 
     // Eliminar un producto
     public function destroy($id)
     {
-        $product = Product::findOrFail($id);
-        $product->delete(); // Eliminar el producto
+        $product = Product::find($id);
 
-        // Redirigir al índice de productos
-        return redirect()->route('products.index');
+        if (!$product) {
+            return redirect()->route('products.index')->with('error', 'Producto no encontrado.');
+        }
+
+        $product->delete();
+
+        return redirect()->route('products.index')->with('success', 'Producto eliminado correctamente.');
     }
 }
