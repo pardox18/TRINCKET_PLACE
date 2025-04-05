@@ -9,26 +9,17 @@ class Product extends Model
 {
     use HasFactory;
 
-    // Atributos que se pueden asignar masivamente
+    // Campos asignables en el modelo
     protected $fillable = [
-        'name', 'description', 'price', 'category_id',
+        'nombre',          // Cambié 'name' por 'nombre' para que coincida con los datos
+        'descripcion',     // Cambié 'description' por 'descripcion'
+        'precio',          // Cambié 'price' por 'precio'
+        'category_id',
     ];
 
-    // Relación inversa con Category (un producto pertenece a una categoría)
+    // Relación con la categoría
     public function category()
     {
         return $this->belongsTo(Category::class);
-    }
-
-    // Relación muchos a muchos con Order (un producto puede estar en muchos pedidos)
-    public function orders()
-    {
-        return $this->belongsToMany(Order::class);
-    }
-
-    // Relación uno a muchos con Comment (un producto puede tener muchos comentarios)
-    public function comments()
-    {
-        return $this->hasMany(Comment::class);
     }
 }

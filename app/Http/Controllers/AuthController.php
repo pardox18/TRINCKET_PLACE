@@ -1,22 +1,49 @@
 <?php
 
-// app/Http/Controllers/AuthController.php
-
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 
+
+
 class AuthController extends Controller
 {
+    // Mostrar formulario de inicio de sesión
+    public function showLoginForm()
+    {
+        return view('auth.login');
+    }
+
+    // Iniciar sesión
+    public function login(Request $request)
+    {
+        $credentials = $request->only('email', 'password');
+
+        if (Auth::attempt($credentials)) {
+            // Redirige al index después de un inicio de sesión exitoso
+            return redirect()->route('index');
+        }
+
+        // Si las credenciales son incorrectas, vuelve al login con un error
+        return redirect()->route('login')->withErrors(['email' => 'Credenciales incorrectas']);
+    }
+
+    // Cerrar sesión
+    public function logout()
+    {
+        Auth::logout();
+        return redirect()->route('welcome');
+    }
+
     // Mostrar formulario de registro
     public function showRegistrationForm()
     {
-        return view('auth.register'); // Vista de registro
+        return view('auth.register');
     }
 
-    // Registrar nuevo usuario
+    // Registrar usuario
     public function register(Request $request)
     {
         $request->validate([
@@ -35,36 +62,8 @@ class AuthController extends Controller
         // Iniciar sesión automáticamente
         Auth::login($user);
 
-        // Redirigir al welcome
-        return redirect()->route('welcome');
+        // Redirigir a la vista correcta
+        return redirect()->route('index'); // Redirige a la vista de index.blade.php
     }
 
-    // Mostrar formulario de inicio de sesión
-    public function showLoginForm()
-    {
-        return view('auth.login'); // Vista de inicio de sesión
-    }
-
-    // Iniciar sesión
-    public function login(Request $request)
-    {
-        $credentials = $request->only('email', 'password');
-
-        // Intentar autenticar al usuario
-        if (Auth::attempt($credentials)) {
-            return redirect()->route('welcome'); // Redirigir al welcome después de iniciar sesión
-        }
-
-        // Si las credenciales no coinciden
-        return back()->withErrors([
-            'email' => 'Las credenciales no coinciden con nuestros registros.',
-        ]);
-    }
-
-    // Cerrar sesión
-    public function logout()
-    {
-        Auth::logout(); // Cerrar sesión
-        return redirect()->route('login'); // Redirigir al login
-    }
 }

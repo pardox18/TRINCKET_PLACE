@@ -4,20 +4,33 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ProductController extends Controller
 {
     // Mostrar todos los productos
     public function index()
     {
-        $products = Product::all(); // Obtener todos los productos
-        return view('products.index', compact('products')); // Retorna la vista con los productos
+        $products = Product::all();
+        return view('auth.products.index', compact('products'));
+    }
+
+    // Mostrar un producto específico
+    public function show($id)
+    {
+        $product = Product::find($id);
+
+        if (!$product) {
+            return redirect()->route('perfil')->with('error', 'Producto no encontrado.');
+        }
+
+        return view('auth.products.show', compact('product'));
     }
 
     // Mostrar formulario para crear un producto
     public function create()
     {
-        return view('products.create'); // Vista para crear un producto
+        return view('auth.products.create');
     }
 
     // Guardar un nuevo producto
@@ -26,27 +39,34 @@ class ProductController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'required|string',
-            'price' => 'required|numeric',
-            'category_id' => 'required|exists:categories,id', // Validar que la categoría exista
+            'price' => 'required|numeric|min:0',
+            'image' => 'required|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
-        // Crear el producto en la base de datos
+        // Guardar la imagen en storage
+        $imagePath = $request->file('image')->store('products', 'public');
+
         Product::create([
-            'name' => $request->name,
+            'name'        => $request->name,
             'description' => $request->description,
-            'price' => $request->price,
-            'category_id' => $request->category_id,
+            'price'       => $request->price,
+            'image'       => $imagePath,
+            'user_id'     => Auth::id(), // Asocia al usuario logueado
         ]);
 
-        // Redirigir a la lista de productos
-        return redirect()->route('products.index');
+        return redirect()->route('perfil')->with('success', 'Producto publicado correctamente.');
     }
 
     // Mostrar formulario para editar un producto
     public function edit($id)
     {
-        $product = Product::findOrFail($id); // Buscar producto por ID
-        return view('products.edit', compact('product')); // Vista para editar el producto
+        $product = Product::find($id);
+
+        if (!$product) {
+            return redirect()->route('perfil')->with('error', 'Producto no encontrado.');
+        }
+
+        return view('auth.products.edit', compact('product'));
     }
 
     // Actualizar un producto
@@ -55,30 +75,31 @@ class ProductController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'required|string',
-            'price' => 'required|numeric',
-            'category_id' => 'required|exists:categories,id',
+            'price' => 'required|numeric|min:0',
         ]);
 
-        // Buscar y actualizar el producto
-        $product = Product::findOrFail($id);
-        $product->update([
-            'name' => $request->name,
-            'description' => $request->description,
-            'price' => $request->price,
-            'category_id' => $request->category_id,
-        ]);
+        $product = Product::find($id);
 
-        // Redirigir al índice de productos
-        return redirect()->route('products.index');
+        if (!$product) {
+            return redirect()->route('perfil')->with('error', 'Producto no encontrado.');
+        }
+
+        $product->update($request->only(['name', 'description', 'price']));
+
+        return redirect()->route('perfil')->with('success', 'Producto actualizado correctamente.');
     }
 
     // Eliminar un producto
     public function destroy($id)
     {
-        $product = Product::findOrFail($id);
-        $product->delete(); // Eliminar el producto
+        $product = Product::find($id);
 
-        // Redirigir al índice de productos
-        return redirect()->route('products.index');
+        if (!$product) {
+            return redirect()->route('perfil')->with('error', 'Producto no encontrado.');
+        }
+
+        $product->delete();
+
+        return redirect()->route('perfil')->with('success', 'Producto eliminado correctamente.');
     }
 }

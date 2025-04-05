@@ -11,20 +11,18 @@ return new class extends Migration
      */
     public function up()
 {
-    Schema::create('products', function (Blueprint $table) {
+    Schema::create('productoos', function (Blueprint $table) {
         $table->id();
-        $table->string('name');
-        $table->text('description');
-        $table->decimal('price', 10, 2);
-        $table->integer('stock');
-        $table->foreignId('category_id')->constrained()->onDelete('cascade');
+        $table->string('nombre');
+        $table->decimal('precio', 8, 2);
+        $table->text('descripcion');
         $table->timestamps();
     });
 }
 
 public function down()
 {
-    Schema::dropIfExists('products');
+    Schema::dropIfExists('productoos');
 }
 
 };
