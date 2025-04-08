@@ -12,10 +12,21 @@
             font-family: Arial, sans-serif;
         }
 
+        html, body {
+            height: 100%;
+        }
+
         body {
             background-color: #f2f6fc;
             color: #003366;
             line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .wrapper {
+            flex: 1;
         }
 
         .header {
@@ -74,26 +85,32 @@
             position: relative;
             margin: 20px auto;
             width: 80%;
-            max-width: 800px;
+            max-width: 850px;
+            height: 300px;
             overflow: hidden;
             border-radius: 15px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            background-color: #fff;
         }
 
         .carousel-inner {
             display: flex;
             transition: transform 1s ease-in-out;
+            height: 100%;
         }
 
         .carousel-item {
             min-width: 100%;
             text-align: center;
+            height: 100%;
         }
 
         .carousel-item img {
             width: 100%;
-            max-height: 200px;
+            height: 100%;
             object-fit: contain;
+            padding: 10px;
+            background-color: #fff;
             border-radius: 10px;
         }
 
@@ -124,35 +141,62 @@
             transform: scale(1.1);
             background-color: #004c99;
         }
+
+        footer {
+            background-color: #0066cc;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .social-links a {
+            color: white;
+            margin: 0 10px;
+            text-decoration: none;
+        }
     </style>
 </head>
 <body>
-    <header class="header">
-        <h1>Bienvenido a Trincket Place</h1>
-        <p>Compra, Vende y Descubre. Todo en un Solo Lugar.</p>
-        <div class="buttons">
-            <button onclick="location.href='{{ route('login') }}'">Iniciar sesión</button>
-            <button onclick="location.href='{{ route('register') }}'">Registrarse</button>
-        </div>
-    </header>
-    <section class="search-section">
-        <form action="{{ route('products.index') }}" method="GET">
-            <input type="text" name="search" placeholder="Buscar productos...">
-        </form>
-    </section>
-    <div class="carousel-container">
-        <div class="carousel-inner" id="carousel">
-            <div class="carousel-item">
-                <img src="{{ asset('images/productos/imagen1.webp') }}" alt="Producto 1">
+    <div class="wrapper">
+        <header class="header">
+            <h1>Bienvenido a Trincket Place</h1>
+            <p>Compra, Vende y Descubre. Todo en un Solo Lugar.</p>
+            <div class="buttons">
+                <button onclick="location.href='{{ route('login') }}'">Iniciar sesión</button>
+                <button onclick="location.href='{{ route('register') }}'">Registrarse</button>
             </div>
-            <div class="carousel-item">
-                <img src="{{ asset('images/productos/imagen2.jpg') }}" alt="Producto 2">
-            </div>
-            <div class="carousel-item">
-                <img src="{{ asset('images/productos/imagen3.jpg') }}" alt="Producto 3">
+        </header>
+
+        <section class="search-section">
+            <form action="{{ route('products.index') }}" method="GET">
+                <input type="text" name="search" placeholder="Buscar productos...">
+            </form>
+        </section>
+
+        <div class="carousel-container">
+            <div class="carousel-inner" id="carousel">
+                <div class="carousel-item">
+                    <img src="{{ asset('images/productos/imagen1.webp') }}" alt="Producto 1">
+                </div>
+                <div class="carousel-item">
+                    <img src="{{ asset('images/productos/imagen2.jpg') }}" alt="Producto 2">
+                </div>
+                <div class="carousel-item">
+                    <img src="{{ asset('images/productos/imagen3.jpg') }}" alt="Producto 3">
+                </div>
             </div>
         </div>
     </div>
+
+    <footer>
+        <p style="margin-bottom: 10px;">© 2025 Trincket Place - Todos los derechos reservados.</p>
+        <div class="social-links">
+            <a href="#">Facebook</a>
+            <a href="#">Instagram</a>
+            <a href="#">Twitter</a>
+        </div>
+    </footer>
+
     <script>
         let currentIndex = 0;
         const slides = document.querySelectorAll('.carousel-item');
@@ -169,21 +213,5 @@
 
         setInterval(nextSlide, 3000);
     </script>
-    <section class="categories">
-        <div class="category-card">Electrónica</div>
-        <div class="category-card">Ropa</div>
-        <div class="category-card">Hogar</div>
-        <div class="category-card">Videojuegos</div>
-        <div class="category-card">Libros</div>
-        <div class="category-card">Herramientas</div>
-    </section>
-    <footer style="background-color: #0066cc; color: white; text-align: center; padding: 20px; margin-top: 20px;">
-        <p style="margin-bottom: 10px;">© 2025 Trincket Place - Todos los derechos reservados.</p>
-        <div class="social-links">
-            <a href="#" style="color: white; margin: 0 10px; text-decoration: none;">Facebook</a>
-            <a href="#" style="color: white; margin: 0 10px; text-decoration: none;">Instagram</a>
-            <a href="#" style="color: white; margin: 0 10px; text-decoration: none;">Twitter</a>
-        </div>
-    </footer>
 </body>
 </html>

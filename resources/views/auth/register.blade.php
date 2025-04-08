@@ -6,10 +6,33 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registrarse</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    animation: {
+                        fadeIn: "fadeIn 0.5s ease-in-out",
+                        bounce: "bounce 1s infinite",
+                        slideUp: "slideUp 0.6s ease-out"
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            "0%": { opacity: "0" },
+                            "100%": { opacity: "1" }
+                        },
+                        slideUp: {
+                            "0%": { opacity: "0", transform: "translateY(50px)" },
+                            "100%": { opacity: "1", transform: "translateY(0)" }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
 </head>
-<body class="bg-blue-500 flex items-center justify-center min-h-screen text-white">
+<body class="bg-blue-100 flex items-center justify-center min-h-screen text-white">
 
-    <div class="max-w-md w-full bg-white p-6 rounded-2xl shadow-lg text-gray-800 animate-fadeIn">
+    <div class="max-w-md w-full bg-white p-6 rounded-2xl shadow-lg text-gray-800 animate-slideUp">
         <h2 class="text-3xl font-bold text-center mb-6 animate-bounce">Registrarse</h2>
 
         <!-- Errores de validación -->

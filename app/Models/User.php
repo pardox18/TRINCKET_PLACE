@@ -2,35 +2,56 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Notifications\Notifiable;
+use App\Models\Publicacion; // ✅ Asegura que se importe la clase correctamente
+use App\Models\Role;
+use App\Models\Permission;
+use App\Models\Order;
 
 class User extends Authenticatable
 {
     use HasFactory, Notifiable;
 
-    // Campos asignables en el modelo
     protected $fillable = [
-        'name', 'email', 'password',
+        'name',
+        'email',
+        'password',
+        'rol', // Asegúrate de que 'rol' esté si se actualiza desde formularios
     ];
 
-    // Atributos que deben ocultarse en las respuestas JSON
     protected $hidden = [
-        'password', 'remember_token',
+        'password',
+        'remember_token',
     ];
 
-    // Atributos que se deben convertir a tipos de datos específicos
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
 
-// En el modelo User
-// En el modelo User (App\Models\User.php)
-public function carrito()
-{
-    return $this->hasMany(Carrito::class);  // Suponiendo que un usuario puede tener varios productos en su carrito
-}
+    // Relación muchos a muchos con Role (un usuario puede tener varios roles)
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class);
+    }
 
+    // Relación muchos a muchos con Permission (un usuario puede tener varios permisos)
+    public function permissions()
+    {
+        return $this->belongsToMany(Permission::class);
+    }
 
+    // Relación uno a muchos con Order (un usuario puede tener varias órdenes)
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
+    }
+
+    // Relación uno a muchos con Publicacion (un usuario puede tener varias publicaciones)
+    public function publicaciones()
+    {
+        return $this->hasMany(Publicacion::class);
+    }
 }

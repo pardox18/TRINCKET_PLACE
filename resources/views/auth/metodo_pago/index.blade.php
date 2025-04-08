@@ -7,9 +7,10 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f0f4f8;
+            background-color: #ebf8ff; /* Este es el color bg-blue-100 */
             text-align: center;
             padding: 50px;
+            margin: 0;
         }
         .container {
             max-width: 600px;

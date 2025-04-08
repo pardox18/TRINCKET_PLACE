@@ -17,8 +17,7 @@ return new class extends Migration
             $table->longText('payload');
             $table->unsignedTinyInteger('attempts');
             $table->timestamp('reserved_at')->nullable(); // Cambiado a timestamp
-            $table->timestamp('available_at'); // Cambiado a timestamp
-            $table->timestamp('created_at'); // Cambiado a timestamp
+            $table->timestamp('available_at')->nullable(); // Cambiado a timestamp y añadido nullable
             $table->timestamps(); // Incluye los timestamps de Laravel
         });
 
@@ -31,8 +30,7 @@ return new class extends Migration
             $table->longText('failed_job_ids');
             $table->mediumText('options')->nullable();
             $table->timestamp('cancelled_at')->nullable(); // Cambiado a timestamp
-            $table->timestamp('created_at'); // Cambiado a timestamp
-            $table->timestamp('finished_at')->nullable(); // Cambiado a timestamp
+            $table->timestamps(); // Incluye los timestamps de Laravel
         });
 
         Schema::create('failed_jobs', function (Blueprint $table) {

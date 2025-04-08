@@ -3,15 +3,18 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\WelcomeController;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\Auth\ForgotPasswordController;
+use App\Http\Controllers\auth\ForgotPasswordController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CarritoController;
-use App\Http\Controllers\PaymentController; // Controlador de métodos de pago
+use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\IndexController;
 
-// Página de inicio (Welcome)
+// Página pública
 Route::get('/', [WelcomeController::class, 'index'])->name('welcome');
+Route::get('/home', fn () => redirect()->route('index'))->name('home');
 
 // Autenticación
 Route::get('login', [AuthController::class, 'showLoginForm'])->name('login');
@@ -21,37 +24,30 @@ Route::post('logout', [AuthController::class, 'logout'])->name('logout')->middle
 Route::get('register', [AuthController::class, 'showRegistrationForm'])->name('register');
 Route::post('register', [AuthController::class, 'register']);
 
-// Olvidaste tu contraseña
-Route::get('forgot-password', [ForgotPasswordController::class, 'showLinkRequestForm'])->name('password.request');
-Route::post('forgot-password', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
+// Recuperación de contraseña
+Route::view('/forgot-password', 'auth.forgot-password')->name('password.request');
+Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
 
-// 🔹 Rutas de categorías
+// Categorías
 Route::get('/categoria/{categoria}', [CategoryController::class, 'show'])
     ->whereIn('categoria', ['accesorios', 'moda', 'a_mano', 'artesano'])
     ->name('categoria.show');
 
-// 🔒 Rutas protegidas (requieren autenticación)
+// Rutas protegidas por autenticación
 Route::middleware(['auth'])->group(function () {
 
-    // Página principal después de iniciar sesión
-    Route::get('/home', function () {
-        return redirect()->route('index');
-    })->name('home');
-
-    // Página de inicio después de autenticación
-    Route::get('/index', function () {
-        return view('auth.index');
-    })->name('index');
+    Route::get('/index', [IndexController::class, 'index'])->name('index');
 
     // Perfil
     Route::get('/perfil', [ProfileController::class, 'show'])->name('profile.show');
     Route::post('/perfil/update', [ProfileController::class, 'update'])->name('profile.update');
 
-    // Productos (CRUD)
+    // Productos
     Route::resource('products', ProductController::class)->except(['show']);
     Route::get('/products/{product}', [ProductController::class, 'show'])->name('products.show');
-    Route::get('producto/{id}', [ProductController::class, 'show'])->name('producto.show');
-    // Vistas individuales de productos
+    Route::get('/productos', [ProductController::class, 'index'])->name('product.index');
+
+    // Productos estáticos
     Route::view('/producto-bolso', 'auth.producto_bolso')->name('producto.bolso');
     Route::view('/producto-arequipe', 'auth.producto_arequipe')->name('producto.arequipe');
     Route::view('/producto-llavero', 'auth.producto_llavero')->name('producto.llavero');
@@ -59,16 +55,21 @@ Route::middleware(['auth'])->group(function () {
 
     // Carrito
     Route::get('/carrito', [CarritoController::class, 'index'])->name('carrito.index');
-    Route::post('/carrito/agregar/{id}', [CarritoController::class, 'agregarAlCarrito'])->name('carrito.agregar');
-    Route::post('/carrito/eliminar/{id}', [CarritoController::class, 'eliminar'])->name('carrito.eliminar');
+// web.php
+
+Route::delete('/carrito/eliminar/{id}', [CarritoController::class, 'eliminar'])->name('carrito.eliminar');
+    // Agregar al carrito
+    Route::post('/carrito/agregar', [CarritoController::class, 'agregarProductoManual'])->name('carrito.agregar');
+    Route::post('/carrito/agregar/{id}', [CarritoController::class, 'agregarAlCarrito'])->name('carrito.agregar.producto');
+
+    // Actualizar carrito
     Route::post('/carrito/actualizar', [CarritoController::class, 'actualizar'])->name('carrito.actualizar');
-    Route::post('/carrito/vaciar', [CarritoController::class, 'vaciar'])->name('carrito.vaciar');
 
-    // Rutas de pago
-    Route::post('procesar-pago', [PaymentController::class, 'procesarPago'])->name('pago.procesar');
+    // Pagos
     Route::get('/metodos-pago', [PaymentController::class, 'index'])->name('metodos.pago');
-    
-    // Agregar ruta para la lista de productos (product.index)
-    Route::get('productos', [ProductController::class, 'index'])->name('product.index');
-});
+    Route::post('/procesar-pago', [PaymentController::class, 'procesarPago'])->name('pago.procesar');
 
+    // Admin
+    Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+    Route::delete('/admin/delete/{id}', [AdminController::class, 'delete'])->name('admin.delete');
+});

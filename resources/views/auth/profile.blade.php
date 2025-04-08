@@ -49,7 +49,6 @@
     <!-- Perfil del Usuario -->
     <div class="w-full max-w-4xl mt-10 px-6 animate-fadeIn">
         <div class="bg-white p-6 rounded-2xl shadow-lg flex flex-col items-center">
-            <!-- Foto de perfil -->
             <div class="w-32 h-32 bg-blue-300 rounded-full overflow-hidden mb-4 border-4 border-white shadow-md">
                 @if(Auth::user()->profile_photo)
                     <img src="{{ asset('storage/' . Auth::user()->profile_photo) }}" alt="Foto de perfil" class="w-full h-full object-cover">
@@ -57,8 +56,6 @@
                     <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&background=3b82f6&color=fff&size=128" alt="Avatar" class="w-full h-full object-cover">
                 @endif
             </div>
-
-            <!-- Nombre del usuario -->
             <h2 class="text-4xl font-extrabold text-blue-700 mb-1 text-center">{{ Auth::user()->name }}</h2>
             <p class="text-gray-600 mb-4 text-lg">¡Bienvenido a tu perfil personal!</p>
         </div>
@@ -87,8 +84,13 @@
                         <div class="bg-gray-100 p-4 rounded-xl shadow-md hover:shadow-xl transition-transform hover:scale-105">
                             <img src="{{ asset('storage/' . $product->imagen) }}" alt="{{ $product->nombre }}" class="w-full h-40 object-cover rounded mb-3">
                             <h5 class="text-lg font-bold text-gray-800">{{ $product->nombre }}</h5>
+                            <!-- ✅ Mostrar categoría -->
+                            @if($product->category)
+                                <p class="text-sm text-purple-600 mb-1">Categoría: <span class="font-semibold">{{ $product->category->nombre }}</span></p>
+                            @endif
                             <p class="text-sm text-gray-600 mb-2">{{ $product->descripcion }}</p>
                             <p class="text-red-500 font-bold text-lg">$ {{ number_format($product->precio, 0, ',', '.') }}</p>
+                            <p class="text-sm text-blue-600 mt-1">Cantidad disponible: <span class="font-semibold">{{ $product->cantidad }}</span></p>
                             <div class="mt-4 flex justify-between">
                                 <a href="{{ route('products.edit', $product->id) }}" class="px-3 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Editar</a>
                                 <form action="{{ route('products.destroy', $product->id) }}" method="POST">
@@ -113,6 +115,9 @@
                 <input type="text" name="nombre" placeholder="Nombre del producto" class="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400" required>
                 <textarea name="descripcion" rows="3" placeholder="Descripción" class="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400" required></textarea>
                 <input type="number" name="precio" step="0.01" placeholder="Precio" class="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400" required>
+                <input type="number" name="cantidad" min="1" placeholder="Cantidad disponible" class="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400" required>
+                <!-- ✅ Campo de categoría -->
+                <input type="text" name="categoria" placeholder="Categoría" class="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-purple-400" required>
                 <input type="file" name="imagen" class="w-full text-sm" required>
                 <div class="flex justify-end gap-3">
                     <button type="button" onclick="toggleModal()" class="bg-gray-300 px-4 py-2 rounded hover:bg-gray-400">Cancelar</button>

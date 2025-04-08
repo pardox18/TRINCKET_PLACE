@@ -30,7 +30,7 @@
         }
     </script>
 </head>
-<body class="bg-blue-500 flex items-center justify-center min-h-screen text-white">
+<body class="bg-blue-100 flex items-center justify-center min-h-screen text-white">
 
     <div class="max-w-md w-full bg-white p-6 rounded-2xl shadow-lg text-gray-800 animate-slideUp">
         <h2 class="text-3xl font-bold text-center mb-6 animate-bounce">Iniciar sesión</h2>

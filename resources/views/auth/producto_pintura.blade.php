@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detalles del Producto - Trincket Place</title>
+    <title>Pintura Retrato - Trincket Place</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -29,60 +29,81 @@
         }
     </script>
 </head>
-<body class="bg-blue-500 flex flex-col items-center min-h-screen text-white">
-
+<body class="bg-blue-100 text-gray-800 min-h-screen">
+    @auth
     <!-- Encabezado -->
-    <div class="w-full bg-white shadow-md py-4 px-6 flex justify-between items-center animate-slideUp">
+    <header class="bg-white shadow-md py-4 px-6 flex justify-between items-center animate-slideUp">
         <h1 class="text-3xl font-bold text-blue-600">Trincket Place</h1>
-
-        <div class="flex items-center gap-4">
-            <form action="#" method="GET" class="relative">
+        <nav class="flex items-center gap-4">
+            <form action="{{ route('products.index') }}" method="GET" class="relative">
                 <input type="text" name="search" placeholder="Buscar productos..."
-                    class="w-64 px-4 py-2 bg-blue-100 text-blue-900 border border-blue-300 rounded-full focus:ring-2 focus:ring-blue-400 placeholder-blue-500">
-                <button type="submit" class="absolute right-3 top-2 text-blue-500 hover:text-blue-700">
-                    🔍
-                </button>
+                       class="w-64 px-4 py-2 bg-blue-50 text-blue-900 border border-blue-300 rounded-full focus:ring-2 focus:ring-blue-400 placeholder-blue-500">
+                <button type="submit" class="absolute right-3 top-2 text-blue-500 hover:text-blue-700">🔍</button>
             </form>
-            <p class="text-blue-700 font-semibold">👤 Invitado</p>
-            <a href="{{ route('home') }}" class="bg-blue-600 text-white px-4 py-2 rounded-lg shadow-md hover:bg-blue-700 hover:scale-105 transition-transform"> Inicio</a>
-        </div>
-    </div>
+            <p class="text-blue-700 font-semibold">👤 {{ Auth::user()->name }}</p>
+            <a href="{{ route('index') }}" class="bg-blue-600 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-700 hover:scale-105 transition-transform">Inicio</a>
+        </nav>
+    </header>
 
-    <!-- Contenido principal -->
-    <div class="max-w-2xl w-full bg-white p-6 rounded-2xl shadow-lg text-gray-800 mt-10 animate-slideUp">
+    <!-- Producto Principal -->
+    <main class="max-w-2xl mx-auto mt-10 bg-white p-6 rounded-2xl shadow-xl animate-fadeIn">
         <h2 class="text-3xl font-bold text-center text-blue-600">🎨 Pintura Retrato</h2>
-        <img src="/images/producto4.jpg" alt="Pintura Retrato" class="w-full rounded-lg mt-4">
+        <img src="{{ asset('images/mona.jpg') }}" alt="Pintura Retrato"
+     class="mx-auto h-24 w-24 object-cover rounded-lg mt-4" loading="lazy">
         <p class="text-lg mt-4">Retratos pintados a mano con gran detalle y calidad artística.</p>
-        <p class="text-red-500 font-bold text-xl mt-2">$50.000</p>
-        <button class="w-full bg-green-500 text-white px-4 py-2 rounded-lg mt-4 hover:bg-green-600 transition-transform transform hover:scale-105 hover:shadow-xl">
-            Agregar al Carrito
-        </button>
-    </div>
+        <p class="text-xl font-bold text-red-500 mt-2">$50.000</p>
 
-    <!-- Sugerencias de otras pinturas -->
-    <div class="max-w-3xl w-full bg-white p-6 rounded-2xl shadow-lg text-gray-800 mt-10 animate-fadeIn">
-        <h2 class="text-2xl font-bold text-center text-blue-600 mb-4">🎨 Otras pinturas que podrían gustarte</h2>
+        <form action="{{ route('carrito.agregar', 16) }}" method="POST" class="mt-4">
+            @csrf
+            <input type="hidden" name="name" value="Pintura Retrato">
+            <input type="hidden" name="price" value="50000">
+            <input type="hidden" name="image_url" value="{{ asset('images/mona.jpg') }}">
+            <button type="submit" class="w-full bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-transform transform hover:scale-105 hover:shadow-xl">
+                Agregar al Carrito
+            </button>
+        </form>
+    </main>
+
+    <!-- Sugerencias -->
+    <section class="max-w-4xl mx-auto mt-10 bg-white p-6 rounded-2xl shadow-lg animate-fadeIn">
+        <h3 class="text-2xl font-bold text-center text-blue-600 mb-4">🎨 Otras pinturas que podrían gustarte</h3>
         <div class="grid grid-cols-2 md:grid-cols-3 gap-6">
-            <div class="bg-gray-100 p-4 text-center rounded-xl shadow-md hover:shadow-xl hover:scale-105 transition-transform">
-                <img src="/images/pintura1.jpg" class="mx-auto rounded-md h-40 object-cover">
-                <p class="mt-2 font-bold">Pintura abstracta</p>
-                <p class="text-red-500 font-bold text-lg">$45.000</p>
-                <button class="bg-green-500 text-white px-3 py-1 rounded-lg mt-2 hover:bg-green-600">Agregar al Carrito</button>
-            </div>
-            <div class="bg-gray-100 p-4 text-center rounded-xl shadow-md hover:shadow-xl hover:scale-105 transition-transform">
-                <img src="/images/pintura2.jpg" class="mx-auto rounded-md h-40 object-cover">
-                <p class="mt-2 font-bold">Paisaje al óleo</p>
-                <p class="text-red-500 font-bold text-lg">$55.000</p>
-                <button class="bg-green-500 text-white px-3 py-1 rounded-lg mt-2 hover:bg-green-600">Agregar al Carrito</button>
-            </div>
-            <div class="bg-gray-100 p-4 text-center rounded-xl shadow-md hover:shadow-xl hover:scale-105 transition-transform">
-                <img src="/images/pintura3.jpg" class="mx-auto rounded-md h-40 object-cover">
-                <p class="mt-2 font-bold">Retrato al carboncillo</p>
-                <p class="text-red-500 font-bold text-lg">$40.000</p>
-                <button class="bg-green-500 text-white px-3 py-1 rounded-lg mt-2 hover:bg-green-600">Agregar al Carrito</button>
-            </div>
-        </div>
-    </div>
+            @php
+                $pinturas = [
+                    ['id' => 17, 'img' => 'abstracta.jpg', 'nombre' => 'Pintura abstracta', 'precio' => '$45.000'],
+                    ['id' => 18, 'img' => 'paisajeole.jpg', 'nombre' => 'Paisaje al óleo', 'precio' => '$55.000'],
+                    ['id' => 19, 'img' => 'carbon.jpg', 'nombre' => 'Retrato al carboncillo', 'precio' => '$40.000'],
+                ];
+            @endphp
 
+            @foreach ($pinturas as $pintura)
+                @php
+                    $precioNumerico = preg_replace('/[^0-9]/', '', $pintura['precio']);
+                @endphp
+                <div class="bg-blue-50 p-4 text-center rounded-xl shadow-md hover:shadow-xl hover:scale-105 transition-transform">
+                    <img src="{{ asset('images/122/' . $pintura['img']) }}" alt="{{ $pintura['nombre'] }}" class="mx-auto rounded-md h-40 object-cover" loading="lazy">
+                    <p class="mt-2 font-semibold">{{ $pintura['nombre'] }}</p>
+                    <p class="text-red-500 font-bold text-lg">{{ $pintura['precio'] }}</p>
+                    <form action="{{ route('carrito.agregar', $pintura['id']) }}" method="POST">
+                        @csrf
+                        <input type="hidden" name="name" value="{{ $pintura['nombre'] }}">
+                        <input type="hidden" name="price" value="{{ $precioNumerico }}">
+                        <input type="hidden" name="image_url" value="{{ asset('images/122/' . $pintura['img']) }}">
+                        <button type="submit" class="mt-2 w-full bg-green-500 text-white py-1.5 rounded-lg hover:bg-green-600 transition-all">
+                            Agregar al Carrito
+                        </button>
+                    </form>
+                </div>
+            @endforeach
+        </div>
+    </section>
+    @else
+    <!-- Si no está autenticado -->
+    <section class="max-w-xl mx-auto mt-20 p-6 bg-white shadow-lg rounded-lg text-center animate-fadeIn">
+        <h2 class="text-3xl font-bold text-red-600">Acceso Restringido</h2>
+        <p class="text-lg mt-4">Debes iniciar sesión para ver este contenido.</p>
+        <a href="{{ route('login') }}" class="inline-block mt-4 bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg">Iniciar Sesión</a>
+    </section>
+    @endauth
 </body>
 </html>

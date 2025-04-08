@@ -29,7 +29,7 @@
         }
     </script>
 </head>
-<body class="bg-blue-500 flex flex-col items-center min-h-screen text-white">
+<body class="bg-blue-100 flex flex-col items-center min-h-screen text-white">
 
     <!-- Encabezado -->
     <div class="w-full bg-white shadow-md py-4 px-6 flex justify-between items-center animate-slideUp">
@@ -62,22 +62,22 @@
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
             @php
                 $moda = [
-                    ['img' => 'camisa1.jpg', 'nombre' => 'Camisa Casual', 'descripcion' => 'Camisa de algodón, ideal para cualquier ocasión.', 'precio' => '$35.000'],
-                    ['img' => 'jeans1.jpg', 'nombre' => 'Jeans Slim Fit', 'descripcion' => 'Jeans cómodos con diseño moderno.', 'precio' => '$50.000'],
-                    ['img' => 'vestido1.jpg', 'nombre' => 'Vestido Elegante', 'descripcion' => 'Vestido largo perfecto para eventos especiales.', 'precio' => '$70.000'],
-                    ['img' => 'chaqueta1.jpg', 'nombre' => 'Chaqueta de Cuero', 'descripcion' => 'Chaqueta de cuero sintético con corte ajustado.', 'precio' => '$120.000'],
-                    ['img' => 'zapatos1.jpg', 'nombre' => 'Zapatos Deportivos', 'descripcion' => 'Zapatillas con tecnología de amortiguación.', 'precio' => '$80.000'],
-                    ['img' => 'bolso1.jpg', 'nombre' => 'Bolso de Moda', 'descripcion' => 'Bolso espacioso con diseño vanguardista.', 'precio' => '$45.000'],
+                    ['img' => 'tecnologodesena.webp', 'nombre' => 'Camisa Casual', 'descripcion' => 'Camisa de algodón, ideal para cualquier ocasión.', 'precio' => '$35.000'],
+                    ['img' => 'jean.jpg', 'nombre' => 'Jeans Slim Fit', 'descripcion' => 'Jeans cómodos con diseño moderno.', 'precio' => '$50.000'],
+                    ['img' => 'vestido.avif', 'nombre' => 'Vestido Elegante', 'descripcion' => 'Vestido largo perfecto para eventos especiales.', 'precio' => '$70.000'],
+                    ['img' => 'chaqueta.avif', 'nombre' => 'Chaqueta de Cuero', 'descripcion' => 'Chaqueta de cuero sintético con corte ajustado.', 'precio' => '$120.000'],
+                    ['img' => 'zapatos.webp', 'nombre' => 'Zapatos Deportivos', 'descripcion' => 'Zapatillas con tecnología de amortiguación.', 'precio' => '$80.000'],
+                    ['img' => 'supreme.webp', 'nombre' => 'Bolso de Moda', 'descripcion' => 'Bolso espacioso con diseño vanguardista.', 'precio' => '$45.000'],
                 ];
             @endphp
 
             @foreach($moda as $item)
                 <div class="bg-gray-100 p-4 text-center rounded-xl shadow-md hover:shadow-xl hover:scale-105 transition-transform">
-                    <img src="/images/{{ $item['img'] }}" class="mx-auto rounded-md h-40 object-cover">
+                    <img src="/images/122/{{ $item['img'] }}" alt="{{ $item['nombre'] }}" class="mx-auto rounded-md h-auto max-h-40 object-cover">
                     <p class="mt-2 font-bold text-lg">{{ $item['nombre'] }}</p>
                     <p class="text-gray-600 text-sm">{{ $item['descripcion'] }}</p>
                     <p class="text-red-500 font-bold text-lg mt-2">{{ $item['precio'] }}</p>
-                    <button class="bg-green-500 text-white px-3 py-1 rounded-lg mt-2 hover:bg-green-600 transition-transform hover:scale-105">
+                    <button class="bg-green-500 text-white px-3 py-1 rounded-lg mt-2 hover:bg-green-600 transition-transform hover:scale-105 focus:outline-none">
                         Agregar al Carrito
                     </button>
                 </div>

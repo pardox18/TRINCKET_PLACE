@@ -29,7 +29,7 @@
         }
     </script>
 </head>
-<body class="bg-blue-500 flex flex-col items-center min-h-screen text-white">
+<body class="bg-blue-100 flex flex-col items-center min-h-screen text-white">
 
     <!-- Encabezado -->
     <div class="w-full bg-white shadow-md py-4 px-6 flex justify-between items-center animate-slideUp">
@@ -62,18 +62,18 @@
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
             @php
                 $hecho_a_mano = [
-                    ['img' => 'pulsera1.jpg', 'nombre' => 'Pulsera de Cuentas', 'descripcion' => 'Pulsera artesanal hecha con piedras naturales.', 'precio' => '$15.000'],
-                    ['img' => 'cuadro1.jpg', 'nombre' => 'Pintura en Lienzo', 'descripcion' => 'Arte hecho a mano con colores vibrantes.', 'precio' => '$80.000'],
-                    ['img' => 'madera1.jpg', 'nombre' => 'Escultura de Madera', 'descripcion' => 'Escultura tallada a mano con detalles únicos.', 'precio' => '$120.000'],
-                    ['img' => 'ceramica1.jpg', 'nombre' => 'Jarrón de Cerámica', 'descripcion' => 'Jarrón hecho y pintado a mano.', 'precio' => '$60.000'],
-                    ['img' => 'tejido1.jpg', 'nombre' => 'Bolso Tejido', 'descripcion' => 'Bolso artesanal tejido con materiales ecológicos.', 'precio' => '$45.000'],
-                    ['img' => 'collar1.jpg', 'nombre' => 'Collar de Macramé', 'descripcion' => 'Collar hecho a mano con hilo de algodón.', 'precio' => '$25.000'],
+                    ['img' => 'pulsera_cuentas.webp', 'nombre' => 'Pulsera de Cuentas', 'descripcion' => 'Pulsera artesanal hecha con piedras naturales.', 'precio' => '$15.000'],
+                    ['img' => 'gato.avif', 'nombre' => 'Pintura en Lienzo', 'descripcion' => 'Arte hecho a mano con colores vibrantes.', 'precio' => '$80.000'],
+                    ['img' => 'figura_tallada.jpg', 'nombre' => 'Escultura de Madera', 'descripcion' => 'Escultura tallada a mano con detalles únicos.', 'precio' => '$120.000'],
+                    ['img' => 'jarron.jpeg', 'nombre' => 'Jarrón de Cerámica', 'descripcion' => 'Jarrón hecho y pintado a mano.', 'precio' => '$60.000'],
+                    ['img' => 'bolso_tejido.png', 'nombre' => 'Bolso Tejido', 'descripcion' => 'Bolso artesanal tejido con materiales ecológicos.', 'precio' => '$45.000'],
+                    ['img' => 'collar_macrame.jpg', 'nombre' => 'Collar de Macramé', 'descripcion' => 'Collar hecho a mano con hilo de algodón.', 'precio' => '$25.000'],
                 ];
             @endphp
 
             @foreach($hecho_a_mano as $item)
                 <div class="bg-gray-100 p-4 text-center rounded-xl shadow-md hover:shadow-xl hover:scale-105 transition-transform">
-                    <img src="/images/{{ $item['img'] }}" alt="{{ $item['nombre'] }}" class="mx-auto rounded-md h-auto max-h-40 object-cover">
+                    <img src="/images/122/{{ $item['img'] }}" alt="{{ $item['nombre'] }}" class="mx-auto rounded-md h-auto max-h-40 object-cover">
                     <p class="mt-2 font-bold text-lg">{{ $item['nombre'] }}</p>
                     <p class="text-gray-600 text-sm">{{ $item['descripcion'] }}</p>
                     <p class="text-red-500 font-bold text-lg mt-2">{{ $item['precio'] }}</p>

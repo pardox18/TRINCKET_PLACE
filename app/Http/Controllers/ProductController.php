@@ -8,98 +8,103 @@ use Illuminate\Support\Facades\Auth;
 
 class ProductController extends Controller
 {
-    // Mostrar todos los productos
     public function index()
+{
+    return view('auth.index'); // ✅ Carga directamente auth/index.blade.php
+}
+    public function show(Product $product)
     {
-        $products = Product::all();
-        return view('auth.products.index', compact('products'));
-    }
-
-    // Mostrar un producto específico
-    public function show($id)
-    {
-        $product = Product::find($id);
-
-        if (!$product) {
-            return redirect()->route('perfil')->with('error', 'Producto no encontrado.');
-        }
-
         return view('auth.products.show', compact('product'));
     }
 
-    // Mostrar formulario para crear un producto
     public function create()
     {
         return view('auth.products.create');
     }
 
-    // Guardar un nuevo producto
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
+            'name'        => 'required|string|max:255',
             'description' => 'required|string',
-            'price' => 'required|numeric|min:0',
-            'image' => 'required|image|mimes:jpg,jpeg,png|max:2048',
+            'price'       => 'required|numeric|min:0',
+            'quantity'    => 'nullable|integer|min:0',
+            'category'    => 'nullable|string|max:255',
+            'image'       => 'required|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
-        // Guardar la imagen en storage
         $imagePath = $request->file('image')->store('products', 'public');
 
         Product::create([
             'name'        => $request->name,
             'description' => $request->description,
             'price'       => $request->price,
+            'quantity'    => $request->quantity,
+            'category'    => $request->category,
             'image'       => $imagePath,
-            'user_id'     => Auth::id(), // Asocia al usuario logueado
+            'user_id'     => Auth::id(),
         ]);
 
-        return redirect()->route('perfil')->with('success', 'Producto publicado correctamente.');
+        return redirect()->route('profile.show')->with('success', 'Producto publicado correctamente.');
     }
 
-    // Mostrar formulario para editar un producto
-    public function edit($id)
+    public function edit(Product $product)
     {
-        $product = Product::find($id);
-
-        if (!$product) {
-            return redirect()->route('perfil')->with('error', 'Producto no encontrado.');
-        }
-
-        return view('auth.products.edit', compact('product'));
+        return view('auth.product.edit', compact('product'));
     }
 
-    // Actualizar un producto
     public function update(Request $request, $id)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
+            'name'        => 'required|string|max:255',
             'description' => 'required|string',
-            'price' => 'required|numeric|min:0',
+            'price'       => 'required|numeric|min:0',
+            'quantity'    => 'nullable|integer|min:0',
+            'category'    => 'nullable|string|max:255',
+            'image'       => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
         $product = Product::find($id);
 
         if (!$product) {
-            return redirect()->route('perfil')->with('error', 'Producto no encontrado.');
+            return redirect()->route('profile.show')->with('error', 'Producto no encontrado.');
         }
 
-        $product->update($request->only(['name', 'description', 'price']));
+        // Si hay nueva imagen, reemplaza la antigua
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('products', 'public');
+            $product->image = $imagePath;
+        }
 
-        return redirect()->route('perfil')->with('success', 'Producto actualizado correctamente.');
+        $product->name        = $request->name;
+        $product->description = $request->description;
+        $product->price       = $request->price;
+        $product->quantity    = $request->quantity;
+        $product->category    = $request->category;
+        $product->save();
+
+        return redirect()->route('profile.show')->with('success', 'Producto actualizado correctamente.');
     }
 
-    // Eliminar un producto
     public function destroy($id)
     {
         $product = Product::find($id);
 
         if (!$product) {
-            return redirect()->route('perfil')->with('error', 'Producto no encontrado.');
+            return redirect()->route('profile.show')->with('error', 'Producto no encontrado.');
         }
 
         $product->delete();
 
-        return redirect()->route('perfil')->with('success', 'Producto eliminado correctamente.');
+        return redirect()->route('profile.show')->with('success', 'Producto eliminado correctamente.');
+    }
+
+    public function accesorios()
+    {
+        $productos = Product::whereHas('category', function ($query) {
+            $query->where('name', 'accesorios');
+        })->get();
+
+        return view('categorias.accesorios', compact('productos'));
     }
 }
